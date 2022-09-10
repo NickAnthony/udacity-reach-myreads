@@ -1,15 +1,13 @@
 import PropTypes from 'prop-types';
+import { Link } from "react-router-dom";
 
-const Search = ({ onCloseSearch }) => {
+const Search = () => {
   return(
     <div className="search-books">
       <div className="search-books-bar">
-        <a
-          className="close-search"
-          onClick={() => onCloseSearch()}
-        >
+        <Link className="close-search" to="/">
           Close
-        </a>
+        </Link>
         <div className="search-books-input-wrapper">
           <input
             type="text"

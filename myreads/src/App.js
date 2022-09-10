@@ -2,10 +2,10 @@ import "./App.css";
 import { useState } from "react";
 import BookShelf from './BookShelf.js';
 import { initialBookData } from './InitialBookData.js';
-import Search from "./Search.js";
+import { Link } from "react-router-dom";
+
 
 function App() {
-  const [showSearchPage, setShowSearchpage] = useState(false);
   const [books, setBooks] = useState(initialBookData);
 
   const bookshelves = ["Currently Reading", "Want to Read", "Read"];
@@ -43,32 +43,28 @@ function App() {
 
   return (
     <div className="app">
-      {showSearchPage ? (
-        <Search onCloseSearch={() => setShowSearchpage(false)}/>
-      ) : (
-        <div className="list-books">
-          <div className="list-books-title">
-            <h1>MyReads</h1>
-          </div>
-          <div className="list-books-content">
-            {bookshelves.map((bookshelfTitle) => {
-              const booksInShelf = books.filter(
-                (book) => (book.bookshelf === bookshelfTitle)
-              );
-              return (
-                <BookShelf
-                  key={bookshelfTitle}
-                  bookshelfTitle={bookshelfTitle}
-                  books={booksInShelf}
-                  onBookShelfChange={handleChangeBookShelf}/>
-              );
-            })}
-          </div>
-          <div className="open-search">
-            <a onClick={() => setShowSearchpage(true)}>Add a book</a>
-          </div>
+      <div className="list-books">
+        <div className="list-books-title">
+          <h1>MyReads</h1>
         </div>
-      )}
+        <div className="list-books-content">
+          {bookshelves.map((bookshelfTitle) => {
+            const booksInShelf = books.filter(
+              (book) => (book.bookshelf === bookshelfTitle)
+            );
+            return (
+              <BookShelf
+                key={bookshelfTitle}
+                bookshelfTitle={bookshelfTitle}
+                books={booksInShelf}
+                onBookShelfChange={handleChangeBookShelf}/>
+            );
+          })}
+        </div>
+        <div className="open-search">
+          <Link className="close-search" to="/search">Add a book</Link>
+        </div>
+      </div>
     </div>
   );
 }
