@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import Book from "./Book.js";
 
-const BookShelf = ({ bookshelfTitle, books }) => {
+const BookShelf = ({ bookshelfTitle, books, onBookShelfChange }) => {
   return(
     <div className="bookshelf">
       <h2 className="bookshelf-title">{bookshelfTitle}</h2>
@@ -9,11 +9,9 @@ const BookShelf = ({ bookshelfTitle, books }) => {
         <ol className="books-grid">
           {books.map((book) =>
               <Book
-                key={book.title}
-                currentShelf={bookshelfTitle}
-                title={book.title}
-                author={book.author}
-                backgroundImageUrl={book.backgroundImageUrl}/>
+                key={book.id}
+                book={book}
+                onBookShelfChange={onBookShelfChange}/>
           )}
         </ol>
       </div>
@@ -22,8 +20,9 @@ const BookShelf = ({ bookshelfTitle, books }) => {
 }
 
 BookShelf.propTypes = {
-  prop: PropTypes.string.isRequired,
+  bookshelfTitle: PropTypes.string.isRequired,
   books: PropTypes.array.isRequired,
+  onBookShelfChange: PropTypes.func.isRequired,
 };
 
 export default BookShelf;

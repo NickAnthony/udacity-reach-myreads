@@ -1,12 +1,44 @@
 import "./App.css";
 import { useState } from "react";
 import BookShelf from './BookShelf.js';
-import { books } from './InitialBookData.js';
+import { initialBookData } from './InitialBookData.js';
 
 function App() {
   const [showSearchPage, setShowSearchpage] = useState(false);
+  const [books, setBooks] = useState(initialBookData);
 
   const bookshelves = ["Currently Reading", "Want to Read", "Read"];
+
+  const handleChangeBookShelf = (bookIdToUpdate, newShelf) => {
+    // Handle the None case - remove it from the state completely.
+    if (newShelf === "None") {
+      const remainingBooks = books.filter((book) => (book.id !== bookIdToUpdate));
+      setBooks(remainingBooks);
+      return true;
+    }
+
+    if (!bookshelves.includes(newShelf)) {
+      // This shouldn't happen, so log any call that try to update a book to
+      // the shelf that doesn't exist.
+      console.log(`handleChangeBookShelf - '${newShelf}' is not a known shelf.  Skipping update.`)
+      return false;
+    }
+    // Iterate through the array and update the appropriate book.
+    const updatedBooks = books.map((book) => {
+      if (book.id === bookIdToUpdate) {
+        // This shouldn't happen, so log any call that try to update a book to
+        // the shelf it's already in.
+        if (book.bookshelf === newShelf) {
+          console.log(`handleChangeBookShelf - book ${book.id} is already in shelf ${newShelf}!  Skipping update.`)
+        }
+        book.bookshelf = newShelf;
+      }
+      return book;
+    });
+    // Finally update the state with the new array.
+    setBooks(updatedBooks);
+    return true;
+  }
 
   return (
     <div className="app">
@@ -41,8 +73,11 @@ function App() {
                 (book) => (book.bookshelf === bookshelfTitle)
               );
               return (
-                <BookShelf bookshelfTitle={bookshelfTitle}
-                  books={booksInShelf}/>
+                <BookShelf
+                  key={bookshelfTitle}
+                  bookshelfTitle={bookshelfTitle}
+                  books={booksInShelf}
+                  onBookShelfChange={handleChangeBookShelf}/>
               );
             })}
           </div>

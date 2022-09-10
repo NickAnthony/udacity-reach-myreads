@@ -1,6 +1,10 @@
 import PropTypes from 'prop-types';
+import BookshelfChanger from './BookshelfChanger.js';
 
-const Book = ({ currentShelf, title, author, backgroundImageUrl }) => {
+const Book = ({ book, onBookShelfChange }) => {
+  const handleChangeBookshelf = (newShelf) => {
+    onBookShelfChange(book.id, newShelf);
+  }
   return(
     <li>
       <div className="book">
@@ -11,35 +15,24 @@ const Book = ({ currentShelf, title, author, backgroundImageUrl }) => {
               width: 128,
               height: 193,
               backgroundImage:
-                `url("${backgroundImageUrl}")`,
+                `url("${book.backgroundImageUrl}")`,
             }}
           ></div>
-          <div className="book-shelf-changer">
-            <select>
-              <option value="none" disabled>
-                Move to...
-              </option>
-              <option value="currentlyReading">
-                "Currently Reading"
-              </option>
-              <option value="wantToRead">Want to Read</option>
-              <option value="read">Read</option>
-              <option value="none">None</option>
-            </select>
-          </div>
+          <BookshelfChanger
+            onBookShelfChange={handleChangeBookshelf}
+            bookshelf={book.bookshelf}
+            />
         </div>
-        <div className="book-title">{title}</div>
-        <div className="book-authors">{author}</div>
+        <div className="book-title">{book.title}</div>
+        <div className="book-authors">{book.author}</div>
       </div>
     </li>
   );
 }
 
 Book.propTypes = {
-  currentShelf: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
-  backgroundImageUrl: PropTypes.string.isRequired,
+  book: PropTypes.object.isRequired,
+  onBookShelfChange: PropTypes.func.isRequired,
 };
 
 export default Book;
