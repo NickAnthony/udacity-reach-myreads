@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { bookshelves } from "./BookshelfTitles.js";
 
 
-const BookshelfChanger = ({ initialBookshelf, onBookShelfChange }) => {
+const BookshelfChanger = ({ initialBookshelf, onBookshelfChange }) => {
   const [currentBookshelf, setCurrentBookshelf] = useState(initialBookshelf);
 
   // Set the state to the props on every change to props.
@@ -14,10 +14,8 @@ const BookshelfChanger = ({ initialBookshelf, onBookShelfChange }) => {
   const handleBookshelfChange = (e) => {
     const newShelf = e.target.value;
     setCurrentBookshelf(newShelf);
-    onBookShelfChange(newShelf);
+    onBookshelfChange(newShelf);
   }
-
-
 
   return(
     <div className="book-shelf-changer">
@@ -40,7 +38,7 @@ const BookshelfChanger = ({ initialBookshelf, onBookShelfChange }) => {
 
 BookshelfChanger.propTypes = {
   initialBookshelf: PropTypes.string.isRequired,
-  onBookShelfChange: PropTypes.func.isRequired,
+  onBookshelfChange: PropTypes.func.isRequired,
 };
 
 export default BookshelfChanger;

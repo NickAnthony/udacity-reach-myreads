@@ -99,13 +99,13 @@ const Search = () => {
       </div>
       <div className="search-books-results">
         <ol className="books-grid">
-          {/* We can pass an empty onBookShelfChange function because it won't
+          {/* We can pass an empty onBookshelfChange function because it won't
             * need updating here. */}
           {searchResults.map((book) =>
               <Book
                 key={book.id}
                 book={book}
-                onBookShelfChange={(id, newShelf) => {}}/>
+                onBookshelfChange={(id, newShelf) => {}}/>
           )}
           {(searchResults.length === 0) && <p>Seach returned no results</p>}
         </ol>

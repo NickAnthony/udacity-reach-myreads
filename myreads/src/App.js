@@ -1,6 +1,6 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import BookShelf from './BookShelf.js';
+import Bookshelf from './Bookshelf.js';
 import { Link } from "react-router-dom";
 import { getAll } from "./BooksAPI.js";
 import { bookshelves } from "./BookshelfTitles.js";
@@ -45,7 +45,7 @@ function App() {
     return matched.length ? true : false;
   }
 
-  const handleChangeBookShelf = (bookIdToUpdate, newShelf) => {
+  const handleChangeBookshelf = (bookIdToUpdate, newShelf) => {
     // Handle the None case - remove it from the state completely.
     if (newShelf === "none") {
       const remainingBooks = books.filter((book) => (book.id !== bookIdToUpdate));
@@ -56,7 +56,7 @@ function App() {
     if (!bookshelfIsValid(newShelf)) {
       // This shouldn't happen, so log any call that try to update a book to
       // the shelf that doesn't exist.
-      console.log(`handleChangeBookShelf - '${newShelf}' is not a known shelf.  Skipping update.`);
+      console.log(`handleChangeBookshelf - '${newShelf}' is not a known shelf.  Skipping update.`);
       return false;
     }
     // Iterate through the array and update the appropriate book.
@@ -65,7 +65,7 @@ function App() {
         // This shouldn't happen, so log any call that try to update a book to
         // the shelf it's already in.
         if (book.shelf === newShelf) {
-          console.log(`handleChangeBookShelf - book ${book.id} is already in shelf ${newShelf}!  Skipping update.`)
+          console.log(`handleChangeBookshelf - book ${book.id} is already in shelf ${newShelf}!  Skipping update.`)
         }
         book.shelf = newShelf;
       }
@@ -88,11 +88,11 @@ function App() {
               (book) => (book.shelf === bookshelf.id)
             );
             return (
-              <BookShelf
+              <Bookshelf
                 key={bookshelf.id}
                 bookshelfTitle={bookshelf.title}
                 books={booksInShelf}
-                onBookShelfChange={handleChangeBookShelf}/>
+                onBookshelfChange={handleChangeBookshelf}/>
             );
           })}
         </div>

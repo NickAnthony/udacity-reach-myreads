@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import BookshelfChanger from './BookshelfChanger.js';
 import { update } from "./BooksAPI.js";
 
-const Book = ({ book, onBookShelfChange }) => {
+const Book = ({ book, onBookshelfChange }) => {
 
   async function saveBookshelfUpdate(newShelf) {
     const result = await update(book, newShelf);
@@ -10,7 +10,7 @@ const Book = ({ book, onBookShelfChange }) => {
   };
 
   const handleChangeBookshelf = (newShelf) => {
-    onBookShelfChange(book.id, newShelf);
+    onBookshelfChange(book.id, newShelf);
     saveBookshelfUpdate(newShelf);
   }
 
@@ -29,7 +29,7 @@ const Book = ({ book, onBookShelfChange }) => {
           ></div>
           <BookshelfChanger
             initialBookshelf={book.shelf ? book.shelf : "none"}
-            onBookShelfChange={handleChangeBookshelf}/>
+            onBookshelfChange={handleChangeBookshelf}/>
         </div>
         <div className="book-title">{book.title}</div>
         <div className="book-authors">{book.author}</div>
@@ -40,7 +40,7 @@ const Book = ({ book, onBookShelfChange }) => {
 
 Book.propTypes = {
   book: PropTypes.object.isRequired,
-  onBookShelfChange: PropTypes.func.isRequired,
+  onBookshelfChange: PropTypes.func.isRequired,
 };
 
 export default Book;
