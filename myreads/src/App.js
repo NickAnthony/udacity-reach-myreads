@@ -1,27 +1,62 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BookShelf from './BookShelf.js';
-import { initialBookData } from './InitialBookData.js';
 import { Link } from "react-router-dom";
-
+import { getAll } from "./BooksAPI.js";
+import { bookshelves } from "./BookshelfTitles.js";
 
 function App() {
-  const [books, setBooks] = useState(initialBookData);
+  const [books, setBooks] = useState([]);
 
-  const bookshelves = ["Currently Reading", "Want to Read", "Read"];
+  useEffect(() => {
+    var isMounted = true;
+    // Define getBooks
+    const getBooks = async () => {
+      const res = await getAll();
+      const allBooks = res.map((book) => {
+        // Thumbnails are not gauranteed to exist, so we need to avoid null
+        // references by creating a backgroundImageUrl field.
+        var backgroundImageUrl = "";
+        if ("imageLinks" in book) {
+          if ("thumbnail" in book.imageLinks) {
+            backgroundImageUrl = book.imageLinks.thumbnail;
+          } else if (("smallThumbnail" in book.imageLinks)) {
+            backgroundImageUrl = book.imageLinks.smallThumbnail;
+          }
+        }
+        book.backgroundImageUrl = backgroundImageUrl;
+        return book;
+      });
+
+      if (isMounted) {
+        setBooks(allBooks);
+      }
+    };
+    // Call getBooks
+    getBooks();
+
+    return function cleanup() {
+      isMounted = false;
+    };
+  }, []);
+
+  const bookshelfIsValid = (shelfToCheck) => {
+    const matched = bookshelves.filter((shelf) => (shelf.id === shelfToCheck));
+    return matched.length ? true : false;
+  }
 
   const handleChangeBookShelf = (bookIdToUpdate, newShelf) => {
     // Handle the None case - remove it from the state completely.
-    if (newShelf === "None") {
+    if (newShelf === "none") {
       const remainingBooks = books.filter((book) => (book.id !== bookIdToUpdate));
       setBooks(remainingBooks);
       return true;
     }
 
-    if (!bookshelves.includes(newShelf)) {
+    if (!bookshelfIsValid(newShelf)) {
       // This shouldn't happen, so log any call that try to update a book to
       // the shelf that doesn't exist.
-      console.log(`handleChangeBookShelf - '${newShelf}' is not a known shelf.  Skipping update.`)
+      console.log(`handleChangeBookShelf - '${newShelf}' is not a known shelf.  Skipping update.`);
       return false;
     }
     // Iterate through the array and update the appropriate book.
@@ -29,10 +64,10 @@ function App() {
       if (book.id === bookIdToUpdate) {
         // This shouldn't happen, so log any call that try to update a book to
         // the shelf it's already in.
-        if (book.bookshelf === newShelf) {
+        if (book.shelf === newShelf) {
           console.log(`handleChangeBookShelf - book ${book.id} is already in shelf ${newShelf}!  Skipping update.`)
         }
-        book.bookshelf = newShelf;
+        book.shelf = newShelf;
       }
       return book;
     });
@@ -48,14 +83,14 @@ function App() {
           <h1>MyReads</h1>
         </div>
         <div className="list-books-content">
-          {bookshelves.map((bookshelfTitle) => {
+          {bookshelves.map((bookshelf) => {
             const booksInShelf = books.filter(
-              (book) => (book.bookshelf === bookshelfTitle)
+              (book) => (book.shelf === bookshelf.id)
             );
             return (
               <BookShelf
-                key={bookshelfTitle}
-                bookshelfTitle={bookshelfTitle}
+                key={bookshelf.id}
+                bookshelfTitle={bookshelf.title}
                 books={booksInShelf}
                 onBookShelfChange={handleChangeBookShelf}/>
             );

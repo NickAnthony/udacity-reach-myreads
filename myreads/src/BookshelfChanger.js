@@ -1,39 +1,45 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
+import { bookshelves } from "./BookshelfTitles.js";
 
 
-const BookshelfChanger = ({ bookshelf, onBookShelfChange }) => {
-  const [currentBookshelf, setCurrentBookshelf] = useState(bookshelf);
+const BookshelfChanger = ({ initialBookshelf, onBookShelfChange }) => {
+  const [currentBookshelf, setCurrentBookshelf] = useState(initialBookshelf);
 
   // Set the state to the props on every change to props.
   useEffect(() => {
-    setCurrentBookshelf(bookshelf);
-  }, [bookshelf]);
+    setCurrentBookshelf(currentBookshelf);
+  }, [currentBookshelf]);
 
   const handleBookshelfChange = (e) => {
     const newShelf = e.target.value;
     setCurrentBookshelf(newShelf);
     onBookShelfChange(newShelf);
   }
+
+
+
   return(
     <div className="book-shelf-changer">
       <select value={currentBookshelf} onChange={handleBookshelfChange}>
         <option value="disabled" disabled>
           Move to...
         </option>
-        <option value="Currently Reading">
-          Currently Reading
+        {bookshelves.map((shelf) => (
+          <option key={shelf.id} value={shelf.id}>
+            {shelf.title}
+          </option>
+        ))}
+        <option value="none">
+          None
         </option>
-        <option value="Want to Read">Want to Read</option>
-        <option value="Read">Read</option>
-        <option value="None">None</option>
       </select>
     </div>
   );
 }
 
 BookshelfChanger.propTypes = {
-  bookshelf: PropTypes.string.isRequired,
+  initialBookshelf: PropTypes.string.isRequired,
   onBookShelfChange: PropTypes.func.isRequired,
 };
 

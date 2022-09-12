@@ -1,10 +1,19 @@
 import PropTypes from 'prop-types';
 import BookshelfChanger from './BookshelfChanger.js';
+import { update } from "./BooksAPI.js";
 
 const Book = ({ book, onBookShelfChange }) => {
+
+  async function saveBookshelfUpdate(newShelf) {
+    const result = await update(book, newShelf);
+    console.log(result);
+  };
+
   const handleChangeBookshelf = (newShelf) => {
     onBookShelfChange(book.id, newShelf);
+    saveBookshelfUpdate(newShelf);
   }
+
   return(
     <li>
       <div className="book">
@@ -19,9 +28,8 @@ const Book = ({ book, onBookShelfChange }) => {
             }}
           ></div>
           <BookshelfChanger
-            onBookShelfChange={handleChangeBookshelf}
-            bookshelf={book.bookshelf}
-            />
+            initialBookshelf={book.shelf ? book.shelf : "none"}
+            onBookShelfChange={handleChangeBookshelf}/>
         </div>
         <div className="book-title">{book.title}</div>
         <div className="book-authors">{book.author}</div>
