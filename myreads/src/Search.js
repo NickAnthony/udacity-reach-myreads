@@ -2,11 +2,13 @@ import { Link } from "react-router-dom";
 import { search } from "./BooksAPI.js";
 import { useEffect, useState } from 'react';
 import Book from "./Book.js";
+import LoadingIcon from "./icons/loading.gif";
 
 
 const Search = () => {
   const [searchString, setSearchString] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const handleSearchStringChange = (event) => {
     setSearchString(event.target.value);
@@ -14,6 +16,7 @@ const Search = () => {
 
   useEffect(() => {
     var isMounted = true;
+    setLoading(true);
 
     const getSearch = async(customString) => {
       const finalSearchString = customString ? customString : searchString;
@@ -21,6 +24,7 @@ const Search = () => {
         const res = await search(finalSearchString, 20);
         if (!res || "error" in res) {
           setSearchResults([]);
+          setLoading(false);
           return;
         }
         const newSearchResults = res.map((book) => {
@@ -48,11 +52,13 @@ const Search = () => {
         });
         if (isMounted) {
           setSearchResults(newSearchResults);
+          setLoading(false);
         }
       } catch (error) {
         console.log("Error fetching books data.")
         console.log(error);
         setSearchResults([]);
+        setLoading(false);
       }
     };
 
@@ -80,8 +86,6 @@ const Search = () => {
     };
   }, [searchString]);
 
-
-
   return(
     <div className="search-books">
       <div className="search-books-bar">
@@ -99,15 +103,18 @@ const Search = () => {
       </div>
       <div className="search-books-results">
         <ol className="books-grid">
+          {loading &&
+            <img src={LoadingIcon} alt="Loading Icon" className="loading-icon"/>
+          }
           {/* We can pass an empty onBookshelfChange function because it won't
             * need updating here. */}
-          {searchResults.map((book) =>
+          {!loading && searchResults.map((book) =>
               <Book
                 key={book.id}
                 book={book}
                 onBookshelfChange={(id, newShelf) => {}}/>
           )}
-          {(searchResults.length === 0) && <p>Seach returned no results</p>}
+          {!loading && (searchResults.length === 0) && <p>Seach returned no results</p>}
         </ol>
       </div>
     </div>

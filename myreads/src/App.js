@@ -7,9 +7,11 @@ import { bookshelves } from "./BookshelfTitles.js";
 
 function App() {
   const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     var isMounted = true;
+    setLoading(true);
     // Define getBooks
     const getBooks = async () => {
       const res = await getAll();
@@ -30,6 +32,7 @@ function App() {
 
       if (isMounted) {
         setBooks(allBooks);
+        setLoading(false);
       }
     };
     // Call getBooks
@@ -92,7 +95,8 @@ function App() {
                 key={bookshelf.id}
                 bookshelfTitle={bookshelf.title}
                 books={booksInShelf}
-                onBookshelfChange={handleChangeBookshelf}/>
+                onBookshelfChange={handleChangeBookshelf}
+                loading={loading}/>
             );
           })}
         </div>

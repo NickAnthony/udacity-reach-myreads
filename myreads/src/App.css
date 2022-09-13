@@ -45,6 +45,9 @@ body,
 .bookshelf-books {
   text-align: center;
 }
+.loading-icon {
+  width: 8em;
+}
 
 .open-search {
   position: fixed;
