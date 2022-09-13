@@ -1,40 +1,88 @@
 # MyReads Project
 
-This is the starter template for the final assessment project for Udacity's React Fundamentals course. The goal of this template is to save you time by providing a static example of the CSS and HTML markup that may be used, but without any of the React code that is needed to complete the project. If you choose to start with this template, your job will be to add interactivity to the app by refactoring the static code in this template.
+Manage your reading list with MyReads!  This project lets you manage three
+separate shelves and query the database to find new books to read.
 
-Of course, you are free to start this project from scratch if you wish! Just be sure to use [Create React App](https://reactjs.org/docs/create-a-new-react-app.html) to bootstrap the project.
-
-## TL;DR
+## Launching the project
 
 To get started developing right away:
 
 - install all project dependencies with `npm install`
 - start the development server with `npm start`
 
-## What You're Getting
+## Files
 
 ```bash
-├── CONTRIBUTING.md
-├── README.md - This file.
-├── SEARCH_TERMS.md # The whitelisted short collection of available search terms for you to use with your app.
-├── package.json # npm package manager file. It's unlikely that you'll need to modify this.
+### `CONTRIBUTING.md
+### `README.md - This file.
+├── package.json # npm package manager file.
 ├── public
-│   ├── favicon.ico # React Icon, You may change if you wish.
+│   ├── favicon.ico # Custom MyReads favicon.
 │   └── index.html # DO NOT MODIFY
 └── src
-    ├── App.css # Styles for your app. Feel free to customize this as you desire.
-    ├── App.js # This is the root of your app. Contains static HTML right now.
-    ├── App.test.js # Used for testing. Provided with Create React App. Testing is encouraged, but not required.
+    ├── App.css # Styles for the app.
+    ├── App.js # Root of the application and creates the 3 shelves we need to show.
+    ├── App.test.js # Used for testing. Provided with Create React App.
     ├── BooksAPI.js # A JavaScript API for the provided Udacity backend. Instructions for the methods are below.
-    ├── icons # Helpful images for your app. Use at your discretion.
+    ├── icons # Icons used throughout the application.
     │   ├── add.svg
     │   ├── arrow-back.svg
     │   └── arrow-drop-down.svg
     ├── index.css # Global styles. You probably won't need to change anything here.
-    └── index.js # You should not need to modify this file. It is used for DOM rendering only.
+    ├── index.js # Used for DOM rendering only.  Contains React Router.
+    ├── Bookshelf.js # Used
+    ├── Book.js # Used
+    ├── BookshelfChanger.js # Used
+    ├── BookshelfTitles.js # Maps bookshelf IDs to their readable titles.
+    ├── Search.js # Uses the backend book search API to find new books based off the users' query.
+    └── Template.js # Just a template React file, used for easily creating new
 ```
 
-Remember that good React design practice is to create new JS files for each component and use import/require statements to include them where they are needed.
+## Components
+
+### `App`
+
+Top level component that handles the home page.  It displays 3 bookshelves and
+contains the list of books for each shelf.  Switching of shelves within the UI
+is handled here, whereas switching of shelves in the backend is handled in the
+Book component so that the Search component can change bookshelves.
+
+On render, it loads the books from the backend.
+
+### `Bookshelf`
+
+Individual shelf within the top level home page.  It displays a list of Book
+components.
+
+### `Book`
+
+This is an individual book that includes the thumbnail, title, and author.  When
+a book is changed shelves using the BookshelfChanger, this components sends a
+query to the backend to update the book in the backend so the shelf change
+persists.
+
+### `BookshelfChanger`
+
+This is the drop down component that lets users select the shelf that book is
+on.
+
+### `BookshelfTitles`
+
+This file contains a mapping of bookshelf ID to bookshelf title.
+
+### `Search`
+
+This lets users search and add new books to their shelves.  On render, if the
+search string is empty, it does a search for a random character in the alphabet.
+This creates a nice "did you consider" UX.
+
+Then when the user types their query, it does a query to the backend once the
+user has stopped typing for 1 second.
+
+### `Template`
+
+This is just a default template that makes creating new components easier.
+
 
 ## Backend Server
 
