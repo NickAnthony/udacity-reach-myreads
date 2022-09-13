@@ -4,7 +4,15 @@ import { useEffect, useState } from 'react';
 import Book from "./Book.js";
 import LoadingIcon from "./icons/loading.gif";
 
-
+/* This lets users search and add new books to their shelves.  On render, if the
+ * search string is empty, it does a search for a random character in the
+ * alphabet. This creates a nice "did you consider" UX.
+ * Then when the user types their query, it does a query to the backend once the
+ * user has stopped typing for 1 second.
+ *
+ * Props:
+ *    None, rendered directly from react router for "/serach"
+ */
 const Search = () => {
   const [searchString, setSearchString] = useState("");
   const [searchResults, setSearchResults] = useState([]);

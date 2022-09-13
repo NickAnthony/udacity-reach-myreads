@@ -1,10 +1,21 @@
 import "./App.css";
+import { bookshelves } from "./BookshelfTitles.js";
+import { getAll } from "./BooksAPI.js";
+import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Bookshelf from './Bookshelf.js';
-import { Link } from "react-router-dom";
-import { getAll } from "./BooksAPI.js";
-import { bookshelves } from "./BookshelfTitles.js";
 
+/* Top level component that handles the home page.  It displays 3 bookshelves
+ * and contains the list of books for each shelf.  Switching of shelves within
+ * the UI is handled here, whereas switching of shelves in the backend is
+ * handled in the Book component so that the Search component can change
+ * bookshelves.
+ *
+ * On render, it loads the books from the backend.
+ *
+ * Props:
+ *    None, rendered directly from react router for "/"
+ */
 function App() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);

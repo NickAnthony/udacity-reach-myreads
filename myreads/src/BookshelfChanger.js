@@ -1,8 +1,14 @@
-import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
 import { bookshelves } from "./BookshelfTitles.js";
+import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
-
+/* This is the drop down component that lets users select the shelf that book is
+ * on.
+ *
+ * Props:
+ *    initialBookshelf: the initial bookshelf of the parent Book
+ *    onBookshelfChange: callback function to call if the shelf is changed.
+ */
 const BookshelfChanger = ({ initialBookshelf, onBookshelfChange }) => {
   const [currentBookshelf, setCurrentBookshelf] = useState(initialBookshelf);
 

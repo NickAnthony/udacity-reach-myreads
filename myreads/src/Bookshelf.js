@@ -1,7 +1,18 @@
-import PropTypes from 'prop-types';
 import Book from "./Book.js";
 import LoadingIcon from "./icons/loading.gif";
+import PropTypes from 'prop-types';
 
+/* Individual shelf within the top level home page.  It displays a list of
+ * Books as provided by books (books in this shelf).
+ *
+ * Props:
+ *    bookshelfTitle: title of this booksInShelf
+ *    books: array of books in this shelf
+ *    onBookshelfChange: callback function to pass to Book to update the shelf
+ *        if it changes.
+ *    loading: whether or not the application is loading, aka waiting on data
+ *        from the server
+ */
 const Bookshelf = ({ bookshelfTitle, books, onBookshelfChange, loading }) => {
   return(
     <div className="bookshelf">
