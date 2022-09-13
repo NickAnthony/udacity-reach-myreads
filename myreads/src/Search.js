@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { search } from "./BooksAPI.js";
+import { search, getAll } from "./BooksAPI.js";
 import { useEffect, useState } from 'react';
 import Book from "./Book.js";
 import LoadingIcon from "./icons/loading.gif";
@@ -17,17 +17,46 @@ const Search = () => {
   const [searchString, setSearchString] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentBooks, setCurrentBooks] = useState([]);
 
   const handleSearchStringChange = (event) => {
     setSearchString(event.target.value);
   }
 
+  // Get all books effect.  We just need to do this on the first render because
+  // any updates to the books will persist.
+  useEffect(() => {
+    var isMounted = true;
+
+    const getCurrentBooks = async() => {
+      try {
+        const books = await getAll();
+        if (!books || "error" in books) {
+          return;
+        }
+        if (isMounted) {
+          setCurrentBooks(books);
+        }
+      } catch (error) {
+        console.log("Error fetching books data.")
+        console.log(error);
+      }
+    };
+
+    getCurrentBooks();
+    return function cleanup() {
+      isMounted = false;
+    };
+  }, []);
+
+  // Search Effect - does the search on changes to Search String
   useEffect(() => {
     var isMounted = true;
     setLoading(true);
 
     const getSearch = async(customString) => {
-      const finalSearchString = customString ? customString : searchString;
+      var finalSearchString = customString ? customString : searchString;
+      finalSearchString = finalSearchString.trim();
       try {
         const res = await search(finalSearchString, 20);
         if (!res || "error" in res) {
@@ -116,12 +145,19 @@ const Search = () => {
           }
           {/* We can pass an empty onBookshelfChange function because it won't
             * need updating here. */}
-          {!loading && searchResults.map((book) =>
-              <Book
-                key={book.id}
-                book={book}
-                onBookshelfChange={(id, newShelf) => {}}/>
-          )}
+          {!loading && searchResults.map((book) => {
+            // If the book is already on a shelf, update it to show so!
+            const match = currentBooks.filter((currentBook) => (currentBook.id === book.id));
+            if (match.length > 0) {
+              book.shelf = match[0].shelf;
+            }
+            return (
+                <Book
+                  key={book.id}
+                  book={book}
+                  onBookshelfChange={(id, newShelf) => {}}/>
+            );
+          })}
           {!loading && (searchResults.length === 0) && <p>Seach returned no results</p>}
         </ol>
       </div>
