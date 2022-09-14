@@ -72,15 +72,12 @@ const Search = () => {
               backgroundImageUrl = book.imageLinks.smallThumbnail;
             }
           }
-          var author = "";
-          if ("authors" in book) {
-            author = book.authors.lenth ? book.authors[0] : "";
-          }
+          var authors = ("authors" in book) ? book.authors : [];
           return (
             {
               id: book.id,
               title: book.title,
-              author: author,
+              authors: authors,
               backgroundImageUrl: backgroundImageUrl,
               bookshelf: "None",
             }
