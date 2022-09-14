@@ -45,9 +45,7 @@ const Book = ({ book, onBookshelfChange }) => {
         <div className="book-title">{book.title}</div>
         {book.authors.map((author) => (
           <div key={author} className="book-authors">{author}</div>
-        ))
-        }
-
+        ))}
       </div>
     </li>
   );
