@@ -54,7 +54,6 @@ const Search = () => {
   // Search Effect - does the search on changes to Search String
   useEffect(() => {
     var isMounted = true;
-    console.log(`Search string: |${searchString}|`);
 
     const getSearch = async() => {
       try {
