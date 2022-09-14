@@ -1,8 +1,7 @@
+import { Link } from "react-router-dom";
 import { update } from "./BooksAPI.js";
 import BookshelfChanger from './BookshelfChanger.js';
 import PropTypes from 'prop-types';
-import { Link } from "react-router-dom";
-
 
 /* This is an individual book that includes the thumbnail, title, and author.
  * When a book is changed shelves using the BookshelfChanger, this components

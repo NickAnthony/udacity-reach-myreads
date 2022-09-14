@@ -1,6 +1,5 @@
-import PropTypes from 'prop-types';
 import BookshelfChanger from './BookshelfChanger.js';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { update, get } from "./BooksAPI.js";
 import LoadingIcon from "./icons/loading.gif";
@@ -60,7 +59,7 @@ const BookDetail = () => {
     return function cleanup() {
       isMounted = false;
     };
-  }, []);
+  }, [id]);
 
   // Calls the update function in the backend to update the book in the
   // database.
@@ -124,9 +123,5 @@ const BookDetail = () => {
     </div>
   );
 }
-
-BookDetail.propTypes = {
-  // prop: PropTypes.array.isRequired,
-};
 
 export default BookDetail;
