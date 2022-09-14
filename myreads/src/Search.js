@@ -108,7 +108,7 @@ const Search = () => {
       // Any other mount, we want to use the search query they provided.
       newTimer = setTimeout(() => {
         getSearch();
-      }, 500);
+      }, 400);
     }
 
     return function cleanup() {
