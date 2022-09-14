@@ -16,7 +16,7 @@ import LoadingIcon from "./icons/loading.gif";
 const Search = () => {
   const [searchString, setSearchString] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [currentBooks, setCurrentBooks] = useState([]);
 
   const handleSearchStringChange = (event) => {
@@ -27,6 +27,8 @@ const Search = () => {
   // any updates to the books will persist.
   useEffect(() => {
     var isMounted = true;
+    // Reset search string to on each initial load.
+    setSearchString("");
 
     const getCurrentBooks = async() => {
       try {
@@ -52,13 +54,11 @@ const Search = () => {
   // Search Effect - does the search on changes to Search String
   useEffect(() => {
     var isMounted = true;
-    setLoading(true);
+    console.log(`Search string: |${searchString}|`);
 
-    const getSearch = async(customString) => {
-      var finalSearchString = customString ? customString : searchString;
-      finalSearchString = finalSearchString.trim();
+    const getSearch = async() => {
       try {
-        const res = await search(finalSearchString, 20);
+        const res = await search(searchString.trim(), 20);
         if (!res || "error" in res) {
           setSearchResults([]);
           setLoading(false);
@@ -101,18 +101,14 @@ const Search = () => {
 
     var newTimer;
     if (searchString === "") {
-      // Empty string, we want to do a random search.
-      const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      const randomSearch = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-      newTimer = setTimeout(() => {
-        getSearch(randomSearch);
-      }, 0);
-
+      setLoading(false);
+      setSearchResults([]);
     } else {
+      setLoading(true);
       // Any other mount, we want to use the search query they provided.
       newTimer = setTimeout(() => {
         getSearch();
-      }, 1000);
+      }, 500);
     }
 
     return function cleanup() {
@@ -158,7 +154,8 @@ const Search = () => {
                   onBookshelfChange={(id, newShelf) => {}}/>
             );
           })}
-          {!loading && (searchResults.length === 0) && <p>Seach returned no results</p>}
+          {!loading && searchString !== "" && searchResults.length <= 0 &&
+            <p>Seach returned no results</p>}
         </ol>
       </div>
     </div>
