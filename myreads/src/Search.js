@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { search, getAll } from "./BooksAPI.js";
 import { useEffect, useState } from 'react';
 import Book from "./Book.js";
+import debounce from 'lodash.debounce';
 import LoadingIcon from "./icons/loading.gif";
 
 /* This lets users search and add new books to their shelves.  On render, if the
@@ -19,9 +20,9 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const [currentBooks, setCurrentBooks] = useState([]);
 
-  const handleSearchStringChange = (event) => {
+  const handleSearchStringChange = debounce((event) => {
     setSearchString(event.target.value);
-  }
+  }, 300);
 
   // Get all books effect.  We just need to do this on the first render because
   // any updates to the books will persist.
@@ -57,6 +58,7 @@ const Search = () => {
 
     const getSearch = async() => {
       try {
+        console.log(`getSearch: ${searchString}`)
         const res = await search(searchString.trim(), 20);
         if (!res || "error" in res) {
           setSearchResults([]);
@@ -95,22 +97,16 @@ const Search = () => {
       }
     };
 
-    var newTimer;
     if (searchString === "") {
       setLoading(false);
       setSearchResults([]);
     } else {
       setLoading(true);
       // Any other mount, we want to use the search query they provided.
-      newTimer = setTimeout(() => {
-        getSearch();
-      }, 400);
+      getSearch();
     }
 
     return function cleanup() {
-      // Clean up the previous timer if it hasn't executed by the time the new
-      // search string is updated.
-      clearTimeout(newTimer);
       isMounted = false;
     };
   }, [searchString]);
