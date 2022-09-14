@@ -79,6 +79,16 @@ This creates a nice "did you consider" UX.
 Then when the user types their query, it does a query to the backend once the
 user has stopped typing for 1 second.
 
+### `BookDetail`
+
+This is a detailed view of an individual book that includes the thumbnail,
+title, subtitle, authors, description, and publish date.  This is viewed when
+a user clicks on the thumbnail image of a book.
+It uses the id from the route to determine which book to show.
+When a book is changed shelves using the BookshelfChanger, this components
+sends a query to the backend to update the book in the backend so the shelf
+change persists.
+
 ### `Template`
 
 This is just a default template that makes creating new components easier.

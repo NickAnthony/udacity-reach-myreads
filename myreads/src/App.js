@@ -33,7 +33,7 @@ function App() {
         if ("imageLinks" in book) {
           if ("thumbnail" in book.imageLinks) {
             backgroundImageUrl = book.imageLinks.thumbnail;
-          } else if (("smallThumbnail" in book.imageLinks)) {
+          } else if ("smallThumbnail" in book.imageLinks) {
             backgroundImageUrl = book.imageLinks.smallThumbnail;
           }
         }
